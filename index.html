@@ -1,28 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <title>Frontend Mentor | Advice generator app</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Box sizing rules */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Advice generator app</title>
+      /* Remove default margin */
+      body,
+      h1,
+      h2,
+      h3,
+      h4,
+      p,
+      figure,
+      blockquote,
+      dl,
+      dd {
+        margin: 0;
+      }
 
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
-</head>
-<body>
+      /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+      ul[role='list'],
+      ol[role='list'] {
+        list-style: none;
+      }
 
-  Advice #<!-- Advice ID goes here -->
+      /* Set core root defaults */
+      html:focus-within {
+        scroll-behavior: smooth;
+      }
 
-  "<!-- Advice text goes here -->"
-  
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
-</body>
+      /* Set core body defaults */
+      body {
+        min-height: 100vh;
+        text-rendering: optimizeSpeed;
+        line-height: 1.5;
+      }
+
+      /* A elements that don't have a class get default styles */
+      a:not([class]) {
+        text-decoration-skip-ink: auto;
+      }
+
+      /* Make images easier to work with */
+      img,
+      picture {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* Inherit fonts for inputs and buttons */
+      input,
+      button,
+      textarea,
+      select {
+        font: inherit;
+      }
+
+      /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+      @media (prefers-reduced-motion: reduce) {
+        html:focus-within {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      :root {
+        /* Primary */
+        --light-cyan: hsl(193, 38%, 86%);
+        --neon-green: hsl(150, 100%, 66%);
+        /* Neutral */
+        --grayish-blue: hsl(217, 19%, 38%);
+        --dark-grayish-blue: hsl(217, 19%, 24%);
+        --dark-blue: hsl(218, 23%, 16%);
+      }
+      body {
+        font-family: 'Manrope', sans-serif;
+        font-size: 28px;
+        background-color: var(--dark-blue);
+        color: var(--light-cyan);
+      }
+      main {
+        min-height: 100vh;
+        margin: 0 auto;
+        width: min(90%, 550px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .card {
+        position: relative;
+        padding: 1em;
+        border-radius: 10px;
+        text-align: center;
+        background-color: var(--dark-grayish-blue);
+        box-shadow: 1px 1px 40px var(--dark-blue);
+      }
+      .card h1 {
+        padding-block: 1.2em;
+        letter-spacing: 4px;
+        color: var(--neon-green);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+      }
+      .card_body {
+        margin-block: 1em;
+      }
+      .divider {
+        height: 1em;
+        background-image: url('./images/pattern-divider-mobile.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        margin-block: 1em 1.5em;
+      }
+      .card_footer {
+        cursor: pointer;
+        inset-block-end: -36px;
+        inset-inline-start: calc(50% - 34px);
+        position: absolute;
+        background-color: var(--neon-green);
+        border-radius: 50%;
+        padding: 0.8em;
+      }
+      @media (min-width: 768px) {
+        .divider {
+          background-image: url('./images/pattern-divider-desktop.svg');
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="card">
+        <h1>Advice #<span id="advice_id">117</span></h1>
+        <div class="card_body">
+          <p id="advice">
+            "It is easy to sit up and take notice, what's difficult is getting
+            up and taking action."
+          </p>
+        </div>
+        <div class="divider">
+          <!-- <img src="./images/pattern-divider-mobile.svg" alt="divider" /> -->
+        </div>
+        <div class="card_footer">
+          <img src="./images/icon-dice.svg" alt="dice" />
+        </div>
+      </div>
+    </main>
+    <script>
+      async function getAdvice() {
+        const advice = await fetch('https://api.adviceslip.com/advice').then(
+          (res) => res.json()
+        );
+        return advice;
+      }
+      const dice = document.querySelector('.card_footer');
+      dice.addEventListener('click', () => {
+        getAdvice().then((advice) => {
+          const advice_id = advice.slip.id;
+          const advice_text = advice.slip.advice;
+          const advice_element = document.querySelector('#advice');
+          const advice_id_element = document.querySelector('#advice_id');
+          advice_element.innerHTML = advice_text;
+          advice_id_element.innerHTML = advice_id;
+        });
+      });
+    </script>
+  </body>
 </html>
